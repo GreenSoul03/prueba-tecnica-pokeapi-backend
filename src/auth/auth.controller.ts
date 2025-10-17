@@ -10,8 +10,19 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @ApiOperation({ summary: 'Registrar un nuevo usuario' })
-  @ApiBody({ type: RegisterDto })
-  @ApiResponse({ status: 201, description: 'Usuario registrado correctamente' })
+  @ApiBody({
+    type: RegisterDto,
+    examples: {
+      default: {
+        value: { name: 'Ash', email: 'ash@example.com', password: '123456' },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'Usuario registrado correctamente',
+    schema: { example: { message: 'Usuario creado correctamente', userId: 1 } },
+  })
   @ApiResponse({ status: 400, description: 'Error en los datos de registro' })
   @Post('register')
   register(@Body() dto: RegisterDto) {
@@ -19,8 +30,17 @@ export class AuthController {
   }
 
   @ApiOperation({ summary: 'Login de usuario y obtención de JWT' })
-  @ApiBody({ type: LoginDto })
-  @ApiResponse({ status: 200, description: 'Login exitoso con token JWT' })
+  @ApiBody({
+    type: LoginDto,
+    examples: {
+      default: { value: { email: 'ash@example.com', password: '123456' } },
+    },
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Login exitoso con token JWT',
+    schema: { example: { access_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI...' } },
+  })
   @ApiResponse({ status: 401, description: 'Credenciales incorrectas' })
   @Post('login')
   login(@Body() dto: LoginDto) {

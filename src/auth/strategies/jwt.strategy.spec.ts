@@ -1,18 +1,26 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { JwtService } from './jwt.strategy';
+import { JwtStrategy, JwtPayload } from './jwt.strategy';
+import { PassportModule } from '@nestjs/passport';
 
-describe('JwtService', () => {
-  let service: JwtService;
+describe('JwtStrategy', () => {
+  let strategy: JwtStrategy;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [JwtService],
+      imports: [PassportModule],
+      providers: [JwtStrategy],
     }).compile();
 
-    service = module.get<JwtService>(JwtService);
+    strategy = module.get<JwtStrategy>(JwtStrategy);
   });
 
   it('should be defined', () => {
-    expect(service).toBeDefined();
+    expect(strategy).toBeDefined();
+  });
+
+  it('should validate payload correctly', () => {
+    const payload: JwtPayload = { sub: 1, email: 'test@example.com' };
+    const result = strategy.validate(payload);
+    expect(result).toEqual(payload);
   });
 });

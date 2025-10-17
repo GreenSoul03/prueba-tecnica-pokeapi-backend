@@ -1,41 +1,123 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+  Inject,
+  forwardRef,
+} from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
+import { PokemonService } from '../pokemon/pokemon.service';
+
+// Interfaz para tipar los favoritos con info de Pokémon
+export interface FavoriteDetailed {
+  id: number;
+  userId: number;
+  pokemonId: number;
+  createdAt: Date;
+  pokemon: {
+    id: number;
+    name: string;
+    types: string[];
+    sprite: string;
+    abilities: string[];
+    stats: { name: string; base_stat: number }[];
+    isFavorite: boolean;
+  };
+}
 
 @Injectable()
 export class FavoritesService {
-  constructor(private prisma: PrismaClient) {}
+  constructor(
+    private prisma: PrismaClient,
+    @Inject(forwardRef(() => PokemonService))
+    private pokemonService: PokemonService,
+  ) {}
 
+  // ==============================
+  // Agregar un favorito
+  // ==============================
   async addFavorite(userId: number, pokemonId: number) {
     const userExists = await this.prisma.user.findUnique({
       where: { id: userId },
     });
-    if (!userExists) {
-    throw new Error(`Usuario ${userId} no existe en la BD`);
-    }
+    if (!userExists) throw new NotFoundException(`Usuario ${userId} no existe`);
 
-  return this.prisma.favorite.create({
-    data: { userId, pokemonId },
-  });
-}
-
-  async getFavorites(userId: number) {
-    return this.prisma.favorite.findMany({
-      where: { userId },
-      orderBy: { createdAt: 'desc' },
+    const exists = await this.prisma.favorite.findFirst({
+      where: { userId, pokemonId },
     });
+    if (exists)
+      throw new BadRequestException('Este Pokémon ya está en tus favoritos');
+
+    return this.prisma.favorite.create({ data: { userId, pokemonId } });
   }
 
+  // ==============================
+  // Listar favoritos con info completa de Pokémon
+  // ==============================
+  async getFavoritesDetailed(
+    userId: number,
+    page: number = 1,
+    limit: number = 20,
+    filterName?: string,
+    filterType?: string,
+    orderBy: 'asc' | 'desc' = 'desc',
+  ): Promise<FavoriteDetailed[]> {
+    const offset = (page - 1) * limit;
+
+    // Trae favoritos paginados y ordenados
+    const favorites = await this.prisma.favorite.findMany({
+      where: { userId },
+      orderBy: { createdAt: orderBy },
+      skip: offset,
+      take: limit,
+    });
+
+    // Mapea cada favorito con la info completa del Pokémon
+    let detailedFavorites: FavoriteDetailed[] = await Promise.all(
+      favorites.map(async (f) => {
+        const pokemon = await this.pokemonService.findOne(f.pokemonId, userId);
+        return { ...f, pokemon } as FavoriteDetailed;
+      }),
+    );
+
+    // Filtrar por nombre parcial
+    if (filterName) {
+      detailedFavorites = detailedFavorites.filter((f) =>
+        f.pokemon.name.toLowerCase().includes(filterName.toLowerCase()),
+      );
+    }
+
+    // Filtrar por tipo
+    if (filterType) {
+      detailedFavorites = detailedFavorites.filter((f) =>
+        f.pokemon.types.includes(filterType.toLowerCase()),
+      );
+    }
+
+    return detailedFavorites;
+  }
+
+  // ==============================
+  // Obtener solo los IDs de favoritos (útil para isFavorite)
+  // ==============================
+  async getFavoritesIds(userId: number): Promise<number[]> {
+    const favorites = await this.prisma.favorite.findMany({
+      where: { userId },
+    });
+    return favorites.map((f) => f.pokemonId);
+  }
+
+  // ==============================
+  // Eliminar un favorito
+  // ==============================
   async removeFavorite(userId: number, pokemonId: number) {
     const favorite = await this.prisma.favorite.findFirst({
       where: { userId, pokemonId },
     });
-
-    if (!favorite) {
+    if (!favorite)
       throw new NotFoundException('Este Pokémon no está en tus favoritos');
-    }
 
     await this.prisma.favorite.delete({ where: { id: favorite.id } });
-
-    return { message: 'Favorito eliminado correctamente' };
+    return favorite;
   }
 }
