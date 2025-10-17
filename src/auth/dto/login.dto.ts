@@ -1,9 +1,9 @@
-import { IsEmail, IsString} from 'class-validator';
+import { IsEmail, IsNotEmpty } from 'class-validator';
 
-export class LoginDto{
-  @IsEmail()
+export class LoginDto {
+  @IsEmail({}, { message: 'Debe ser un correo válido' })
   email: string;
 
-  @IsString()
+  @IsNotEmpty({ message: 'La contraseña es obligatoria' })
   password: string;
 }
