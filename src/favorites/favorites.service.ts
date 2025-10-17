@@ -28,9 +28,11 @@ export interface FavoriteDetailed {
 @Injectable()
 export class FavoritesService {
   constructor(
+    @Inject('PRISMA_CLIENT') // ✅ Corregido: usamos el token del provider
     private prisma: PrismaClient,
+
     @Inject(forwardRef(() => PokemonService))
-    private pokemonService: PokemonService,
+    private readonly pokemonService: PokemonService,
   ) {}
 
   // ==============================
@@ -40,13 +42,18 @@ export class FavoritesService {
     const userExists = await this.prisma.user.findUnique({
       where: { id: userId },
     });
-    if (!userExists) throw new NotFoundException(`Usuario ${userId} no existe`);
+
+    if (!userExists) {
+      throw new NotFoundException(`Usuario ${userId} no existe`);
+    }
 
     const exists = await this.prisma.favorite.findFirst({
       where: { userId, pokemonId },
     });
-    if (exists)
+
+    if (exists) {
       throw new BadRequestException('Este Pokémon ya está en tus favoritos');
+    }
 
     return this.prisma.favorite.create({ data: { userId, pokemonId } });
   }
@@ -56,15 +63,14 @@ export class FavoritesService {
   // ==============================
   async getFavoritesDetailed(
     userId: number,
-    page: number = 1,
-    limit: number = 20,
+    page = 1,
+    limit = 20,
     filterName?: string,
     filterType?: string,
     orderBy: 'asc' | 'desc' = 'desc',
   ): Promise<FavoriteDetailed[]> {
     const offset = (page - 1) * limit;
 
-    // Trae favoritos paginados y ordenados
     const favorites = await this.prisma.favorite.findMany({
       where: { userId },
       orderBy: { createdAt: orderBy },
@@ -72,7 +78,6 @@ export class FavoritesService {
       take: limit,
     });
 
-    // Mapea cada favorito con la info completa del Pokémon
     let detailedFavorites: FavoriteDetailed[] = await Promise.all(
       favorites.map(async (f) => {
         const pokemon = await this.pokemonService.findOne(f.pokemonId, userId);
@@ -80,14 +85,12 @@ export class FavoritesService {
       }),
     );
 
-    // Filtrar por nombre parcial
     if (filterName) {
       detailedFavorites = detailedFavorites.filter((f) =>
         f.pokemon.name.toLowerCase().includes(filterName.toLowerCase()),
       );
     }
 
-    // Filtrar por tipo
     if (filterType) {
       detailedFavorites = detailedFavorites.filter((f) =>
         f.pokemon.types.includes(filterType.toLowerCase()),
@@ -98,12 +101,13 @@ export class FavoritesService {
   }
 
   // ==============================
-  // Obtener solo los IDs de favoritos (útil para isFavorite)
+  // Obtener solo los IDs de favoritos
   // ==============================
   async getFavoritesIds(userId: number): Promise<number[]> {
     const favorites = await this.prisma.favorite.findMany({
       where: { userId },
     });
+
     return favorites.map((f) => f.pokemonId);
   }
 
@@ -114,10 +118,13 @@ export class FavoritesService {
     const favorite = await this.prisma.favorite.findFirst({
       where: { userId, pokemonId },
     });
-    if (!favorite)
+
+    if (!favorite) {
       throw new NotFoundException('Este Pokémon no está en tus favoritos');
+    }
 
     await this.prisma.favorite.delete({ where: { id: favorite.id } });
+
     return favorite;
   }
 }

@@ -3,8 +3,7 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { PrismaClient } from '@prisma/client';
-import { JwtStrategy } from './strategies/jwt.strategy'; // 👈 importa aquí
-
+import { JwtStrategy } from './strategies/jwt.strategy';
 @Module({
   imports: [
     JwtModule.register({
@@ -13,7 +12,7 @@ import { JwtStrategy } from './strategies/jwt.strategy'; // 👈 importa aquí
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, PrismaClient, JwtStrategy], // 👈 agrega JwtStrategy aquí
+  providers: [AuthService, PrismaClient, JwtStrategy],
   exports: [AuthService],
 })
 export class AuthModule {}

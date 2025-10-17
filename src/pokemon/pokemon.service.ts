@@ -167,6 +167,7 @@ export class PokemonService {
       const data = await this.client.request<PokemonDetailResponse>(query, {
         id,
       });
+
       const p = data.pokemon_v2_pokemon_by_pk;
       if (!p)
         throw new NotFoundException(`No se encontró el Pokémon con id ${id}`);
@@ -209,6 +210,9 @@ export class PokemonService {
 
       return pokemon;
     } catch (error) {
+      // ✅ Dejar pasar NotFoundException
+      if (error instanceof NotFoundException) throw error;
+
       console.error('Error al consultar GraphQL:', error);
       throw new InternalServerErrorException(
         'Error al obtener detalles del Pokémon',

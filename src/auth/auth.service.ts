@@ -3,13 +3,13 @@ import { PrismaClient, User } from '@prisma/client';
 import { JwtService } from '@nestjs/jwt';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
+import * as bcrypt from 'bcrypt'; // ✅ Import estático para que Jest pueda mockearlo
 
-// Funciones auxiliares para manejar bcrypt con tipos seguros
+// Funciones auxiliares usando import estático
 const hashPassword = async (
   password: string,
   saltRounds = 10,
 ): Promise<string> => {
-  const bcrypt = await import('bcrypt');
   return bcrypt.hash(password, saltRounds);
 };
 
@@ -17,7 +17,6 @@ const comparePassword = async (
   password: string,
   hash: string,
 ): Promise<boolean> => {
-  const bcrypt = await import('bcrypt');
   return bcrypt.compare(password, hash);
 };
 

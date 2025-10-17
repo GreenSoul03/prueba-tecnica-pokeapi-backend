@@ -14,7 +14,11 @@ export class AuthController {
     type: RegisterDto,
     examples: {
       default: {
-        value: { name: 'Ash', email: 'ash@example.com', password: '123456' },
+        value: {
+          name: 'Mauricio Lombardo',
+          email: 'mauricio@example.com',
+          password: 'kitkaton123',
+        },
       },
     },
   })
@@ -33,7 +37,9 @@ export class AuthController {
   @ApiBody({
     type: LoginDto,
     examples: {
-      default: { value: { email: 'ash@example.com', password: '123456' } },
+      default: {
+        value: { email: 'mauricio@example.com', password: 'kitkaton123' },
+      },
     },
   })
   @ApiResponse({

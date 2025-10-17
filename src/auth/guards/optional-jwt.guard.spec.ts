@@ -1,11 +1,10 @@
-import { JwtAuthGuard } from './jwt-auth.guard';
-import { UnauthorizedException } from '@nestjs/common';
+import { OptionalJwtAuthGuard } from './optional-jwt.guard';
 
-describe('JwtAuthGuard', () => {
-  let guard: JwtAuthGuard;
+describe('OptionalJwtAuthGuard', () => {
+  let guard: OptionalJwtAuthGuard;
 
   beforeEach(() => {
-    guard = new JwtAuthGuard();
+    guard = new OptionalJwtAuthGuard();
   });
 
   it('should be defined', () => {
@@ -18,15 +17,9 @@ describe('JwtAuthGuard', () => {
     expect(result).toEqual(user);
   });
 
-  it('should throw UnauthorizedException if user is not present', () => {
-    expect(() => guard['handleRequest'](null, false)).toThrow(
-      UnauthorizedException,
-    );
-  });
-
-  it('should throw provided error if err is present', () => {
-    const error = new Error('Some error');
-    expect(() => guard['handleRequest'](error, null)).toThrow(error);
+  it('should return undefined if user is not present', () => {
+    const result = guard['handleRequest'](null, false);
+    expect(result).toBeUndefined();
   });
 
   it('should return user with correct type', () => {
