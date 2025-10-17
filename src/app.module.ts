@@ -7,6 +7,10 @@ import { FavoritesModule } from './favorites/favorites.module';
 
 @Module({
   imports: [AuthModule, PrismaModule, FavoritesModule],
+import { PokemonModule } from './pokemon/pokemon.module';
+
+@Module({
+  imports: [AuthModule, PrismaModule, PokemonModule],
   controllers: [AppController],
   providers: [AppService],
 })
