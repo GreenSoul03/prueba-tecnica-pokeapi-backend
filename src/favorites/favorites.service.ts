@@ -1,26 +1,41 @@
-import { Injectable } from '@nestjs/common';
-import { CreateFavoriteDto } from './dto/create-favorite.dto';
-import { UpdateFavoriteDto } from './dto/update-favorite.dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { PrismaClient } from '@prisma/client';
 
 @Injectable()
 export class FavoritesService {
-  create(createFavoriteDto: CreateFavoriteDto) {
-    return 'This action adds a new favorite';
+  constructor(private prisma: PrismaClient) {}
+
+  async addFavorite(userId: number, pokemonId: number) {
+    const userExists = await this.prisma.user.findUnique({
+      where: { id: userId },
+    });
+    if (!userExists) {
+    throw new Error(`Usuario ${userId} no existe en la BD`);
+    }
+
+  return this.prisma.favorite.create({
+    data: { userId, pokemonId },
+  });
+}
+
+  async getFavorites(userId: number) {
+    return this.prisma.favorite.findMany({
+      where: { userId },
+      orderBy: { createdAt: 'desc' },
+    });
   }
 
-  findAll() {
-    return `This action returns all favorites`;
-  }
+  async removeFavorite(userId: number, pokemonId: number) {
+    const favorite = await this.prisma.favorite.findFirst({
+      where: { userId, pokemonId },
+    });
 
-  findOne(id: number) {
-    return `This action returns a #${id} favorite`;
-  }
+    if (!favorite) {
+      throw new NotFoundException('Este Pokémon no está en tus favoritos');
+    }
 
-  update(id: number, updateFavoriteDto: UpdateFavoriteDto) {
-    return `This action updates a #${id} favorite`;
-  }
+    await this.prisma.favorite.delete({ where: { id: favorite.id } });
 
-  remove(id: number) {
-    return `This action removes a #${id} favorite`;
+    return { message: 'Favorito eliminado correctamente' };
   }
 }

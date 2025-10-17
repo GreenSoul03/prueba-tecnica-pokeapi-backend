@@ -1,34 +1,28 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Post, Get, Delete, Param, UseGuards, Req } from '@nestjs/common';
 import { FavoritesService } from './favorites.service';
-import { CreateFavoriteDto } from './dto/create-favorite.dto';
-import { UpdateFavoriteDto } from './dto/update-favorite.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
-@Controller('favorites')
+@Controller('api/v1/favorites')
+@UseGuards(JwtAuthGuard)
 export class FavoritesController {
   constructor(private readonly favoritesService: FavoritesService) {}
 
-  @Post()
-  create(@Body() createFavoriteDto: CreateFavoriteDto) {
-    return this.favoritesService.create(createFavoriteDto);
+  @Post(':pokemonId')
+  addFavorite(@Req() req, @Param('pokemonId') pokemonId: string) {
+    const userId = req.user.sub;
+    return this.favoritesService.addFavorite(userId, Number(pokemonId));
   }
 
   @Get()
-  findAll() {
-    return this.favoritesService.findAll();
+  getFavorites(@Req() req) {
+    console.log('Usuario autenticado:', req.user);
+    const userId = req.user.sub;
+    return this.favoritesService.getFavorites(userId);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.favoritesService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateFavoriteDto: UpdateFavoriteDto) {
-    return this.favoritesService.update(+id, updateFavoriteDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.favoritesService.remove(+id);
+  @Delete(':pokemonId')
+  removeFavorite(@Req() req, @Param('pokemonId') pokemonId: string) {
+    const userId = req.user.sub;
+    return this.favoritesService.removeFavorite(userId, Number(pokemonId));
   }
 }
