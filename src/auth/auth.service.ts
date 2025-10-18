@@ -3,9 +3,8 @@ import { PrismaClient, User } from '@prisma/client';
 import { JwtService } from '@nestjs/jwt';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
-import * as bcrypt from 'bcrypt'; // ✅ Import estático para que Jest pueda mockearlo
+import * as bcrypt from 'bcrypt';
 
-// Funciones auxiliares usando import estático
 const hashPassword = async (
   password: string,
   saltRounds = 10,
@@ -27,9 +26,6 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  /**
-   * Registro de usuarios
-   */
   async register(
     dto: RegisterDto,
   ): Promise<{ message: string; userId: number }> {
@@ -39,7 +35,6 @@ export class AuthService {
 
     if (exists) throw new UnauthorizedException('El correo ya está registrado');
 
-    // Generar hash de manera segura
     let hashedPassword: string;
     try {
       hashedPassword = await hashPassword(dto.password);
@@ -58,9 +53,6 @@ export class AuthService {
     return { message: 'Usuario creado correctamente', userId: user.id };
   }
 
-  /**
-   * Login de usuarios
-   */
   async login(dto: LoginDto): Promise<{ access_token: string }> {
     const user: User | null = await this.prisma.user.findUnique({
       where: { email: dto.email },
@@ -68,7 +60,6 @@ export class AuthService {
 
     if (!user) throw new UnauthorizedException('Credenciales inválidas');
 
-    // Verificar contraseña de manera segura
     let isValid = false;
     try {
       isValid = await comparePassword(dto.password, user.password);
@@ -78,7 +69,7 @@ export class AuthService {
 
     if (!isValid) throw new UnauthorizedException('Credenciales inválidas');
 
-    const payload = { sub: user.id, email: user.email }; // Puedes agregar role o name si lo deseas
+    const payload = { sub: user.id, email: user.email };
     const token: string = this.jwtService.sign(payload);
 
     return { access_token: token };

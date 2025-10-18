@@ -7,7 +7,6 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     if (err || !user) {
       throw err || new UnauthorizedException('Unauthorized');
     }
-    // ✅ Forzamos a TUser
     return user as TUser;
   }
 }

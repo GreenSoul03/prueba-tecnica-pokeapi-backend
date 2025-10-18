@@ -12,7 +12,7 @@ import { PokemonModule } from '../pokemon/pokemon.module';
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '1h' },
     }),
-    forwardRef(() => PokemonModule), // rompe ciclo
+    forwardRef(() => PokemonModule),
   ],
   controllers: [FavoritesController],
   providers: [FavoritesService, PrismaClient, JwtStrategy],

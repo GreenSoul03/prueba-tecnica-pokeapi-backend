@@ -25,7 +25,7 @@ interface RequestWithUser extends Request {
 export class PokemonController {
   constructor(private readonly pokemonService: PokemonService) {}
 
-  @UseGuards(OptionalJwtAuthGuard) // JWT opcional
+  @UseGuards(OptionalJwtAuthGuard)
   @ApiOperation({ summary: 'Listar Pokémon paginados con opción de favoritos' })
   @ApiQuery({
     name: 'name',

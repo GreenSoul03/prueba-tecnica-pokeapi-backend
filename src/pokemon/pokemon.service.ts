@@ -210,7 +210,7 @@ export class PokemonService {
 
       return pokemon;
     } catch (error) {
-      // ✅ Dejar pasar NotFoundException
+      // Dejar pasar NotFoundException
       if (error instanceof NotFoundException) throw error;
 
       console.error('Error al consultar GraphQL:', error);

@@ -4,9 +4,9 @@ import { PokemonController } from './pokemon.controller';
 import { FavoritesModule } from '../favorites/favorites.module';
 
 @Module({
-  imports: [forwardRef(() => FavoritesModule)], // rompe ciclo
+  imports: [forwardRef(() => FavoritesModule)],
   controllers: [PokemonController],
   providers: [PokemonService],
-  exports: [PokemonService], // <-- exportamos para que FavoritesService pueda inyectarlo
+  exports: [PokemonService],
 })
 export class PokemonModule {}

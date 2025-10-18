@@ -8,7 +8,6 @@ import {
 import { PrismaClient } from '@prisma/client';
 import { PokemonService } from '../pokemon/pokemon.service';
 
-// Interfaz para tipar los favoritos con info de Pokémon
 export interface FavoriteDetailed {
   id: number;
   userId: number;
@@ -28,16 +27,13 @@ export interface FavoriteDetailed {
 @Injectable()
 export class FavoritesService {
   constructor(
-    @Inject('PRISMA_CLIENT') // ✅ Corregido: usamos el token del provider
+    @Inject('PRISMA_CLIENT') 
     private prisma: PrismaClient,
 
     @Inject(forwardRef(() => PokemonService))
     private readonly pokemonService: PokemonService,
   ) {}
 
-  // ==============================
-  // Agregar un favorito
-  // ==============================
   async addFavorite(userId: number, pokemonId: number) {
     const userExists = await this.prisma.user.findUnique({
       where: { id: userId },
@@ -58,9 +54,6 @@ export class FavoritesService {
     return this.prisma.favorite.create({ data: { userId, pokemonId } });
   }
 
-  // ==============================
-  // Listar favoritos con info completa de Pokémon
-  // ==============================
   async getFavoritesDetailed(
     userId: number,
     page = 1,
@@ -100,9 +93,6 @@ export class FavoritesService {
     return detailedFavorites;
   }
 
-  // ==============================
-  // Obtener solo los IDs de favoritos
-  // ==============================
   async getFavoritesIds(userId: number): Promise<number[]> {
     const favorites = await this.prisma.favorite.findMany({
       where: { userId },
@@ -111,9 +101,6 @@ export class FavoritesService {
     return favorites.map((f) => f.pokemonId);
   }
 
-  // ==============================
-  // Eliminar un favorito
-  // ==============================
   async removeFavorite(userId: number, pokemonId: number) {
     const favorite = await this.prisma.favorite.findFirst({
       where: { userId, pokemonId },

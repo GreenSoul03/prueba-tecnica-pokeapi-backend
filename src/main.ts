@@ -5,7 +5,9 @@ import basicAuth from 'express-basic-auth';
 import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
+  //==============================
   // Crear la app con logger personalizado
+  //==============================
   const app = await NestFactory.create(AppModule, {
     logger: ['error', 'warn', 'debug'],
   });
@@ -28,8 +30,9 @@ async function bootstrap() {
   if (!port) {
     throw new Error('PORT debe estar definido en el .env');
   }
-
+  //==============================
   // Crear objeto users para Basic Auth
+  //==============================
   const users: Record<string, string> = {};
   users[swaggerUser] = swaggerPass;
 
@@ -56,7 +59,9 @@ async function bootstrap() {
   console.log(`Swagger docs: http://localhost:${port}/docs`);
 }
 
+//==============================
 // Manejo global de errores al iniciar
+//==============================
 bootstrap().catch((err) => {
   console.error('Error starting the app:', err);
 });
