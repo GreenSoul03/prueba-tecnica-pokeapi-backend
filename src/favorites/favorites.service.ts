@@ -27,7 +27,7 @@ export interface FavoriteDetailed {
 @Injectable()
 export class FavoritesService {
   constructor(
-    @Inject('PRISMA_CLIENT') 
+    @Inject('PRISMA_CLIENT')
     private prisma: PrismaClient,
 
     @Inject(forwardRef(() => PokemonService))
