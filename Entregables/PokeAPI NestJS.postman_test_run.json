@@ -1,0 +1,257 @@
+{
+	"id": "99d2301a-2e34-490c-b58f-d6a3dde4a10b",
+	"name": "PokeAPI NestJS",
+	"timestamp": "2025-10-19T19:32:06.720Z",
+	"collection_id": "49303921-462d63a5-ff28-480f-baea-cd1b5c5c6fa7",
+	"folder_id": 0,
+	"environment_id": "0",
+	"totalPass": 10,
+	"delay": 0,
+	"persist": true,
+	"status": "finished",
+	"startedAt": "2025-10-19T19:32:04.032Z",
+	"totalFail": 0,
+	"results": [
+		{
+			"id": "1162fda0-eaa5-4185-8f6b-ca59479e649a",
+			"name": "Registro",
+			"url": "http://pokeapi-env.eba-3x7ewjh4.us-east-1.elasticbeanstalk.com/api/v1/auth/register",
+			"time": 145,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Status 201 Created": true
+			},
+			"testPassFailCounts": {
+				"Status 201 Created": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				145
+			],
+			"allTests": [
+				{
+					"Status 201 Created": true
+				}
+			]
+		},
+		{
+			"id": "a96887c5-bb27-4b09-9fd0-7c5a7d044741",
+			"name": "Login",
+			"url": "http://pokeapi-env.eba-3x7ewjh4.us-east-1.elasticbeanstalk.com/api/v1/auth/login",
+			"time": 141,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Login exitoso": true
+			},
+			"testPassFailCounts": {
+				"Login exitoso": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				141
+			],
+			"allTests": [
+				{
+					"Login exitoso": true
+				}
+			]
+		},
+		{
+			"id": "279f78b5-9853-4c49-a3b8-cc36ca5b6c89",
+			"name": "Pokemon (publico y privado)",
+			"url": "http://pokeapi-env.eba-3x7ewjh4.us-east-1.elasticbeanstalk.com/api/v1/pokemon",
+			"time": 137,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status 200 OK": true,
+				"Respuesta contiene resultados": true
+			},
+			"testPassFailCounts": {
+				"Status 200 OK": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Respuesta contiene resultados": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				137
+			],
+			"allTests": [
+				{
+					"Status 200 OK": true,
+					"Respuesta contiene resultados": true
+				}
+			]
+		},
+		{
+			"id": "a0b1dac7-8f1b-42cf-bb8b-a8dd0532d501",
+			"name": "Favoritos (JWT)",
+			"url": "http://pokeapi-env.eba-3x7ewjh4.us-east-1.elasticbeanstalk.com/api/v1/favorites",
+			"time": 101,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status 200 OK": true,
+				"Devuelve un array": true
+			},
+			"testPassFailCounts": {
+				"Status 200 OK": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Devuelve un array": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				101
+			],
+			"allTests": [
+				{
+					"Status 200 OK": true,
+					"Devuelve un array": true
+				}
+			]
+		},
+		{
+			"id": "35af293a-a6df-452f-b446-fdd842d3dadd",
+			"name": "Añadir favorito (JWT)",
+			"url": "http://pokeapi-env.eba-3x7ewjh4.us-east-1.elasticbeanstalk.com/api/v1/favorites/25",
+			"time": 118,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {
+				"Status 201 Created": true,
+				"Se agregó el Pokémon correctamente": true
+			},
+			"testPassFailCounts": {
+				"Status 201 Created": {
+					"pass": 1,
+					"fail": 0
+				},
+				"Se agregó el Pokémon correctamente": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				118
+			],
+			"allTests": [
+				{
+					"Status 201 Created": true,
+					"Se agregó el Pokémon correctamente": true
+				}
+			]
+		},
+		{
+			"id": "b63375cc-2daa-4c87-b44e-ef57874b1c6b",
+			"name": "Eliminar favorito (JWT)",
+			"url": "http://pokeapi-env.eba-3x7ewjh4.us-east-1.elasticbeanstalk.com/api/v1/favorites/25",
+			"time": 77,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status 200 OK": true
+			},
+			"testPassFailCounts": {
+				"Status 200 OK": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				77
+			],
+			"allTests": [
+				{
+					"Status 200 OK": true
+				}
+			]
+		},
+		{
+			"id": "b631be16-28ca-4eff-89f0-153748ddbd08",
+			"name": "Documentacion Swagger protegida",
+			"url": "http://pokeapi-env.eba-3x7ewjh4.us-east-1.elasticbeanstalk.com/docs",
+			"time": 72,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Swagger protegido responde 200": true
+			},
+			"testPassFailCounts": {
+				"Swagger protegido responde 200": {
+					"pass": 1,
+					"fail": 0
+				}
+			},
+			"times": [
+				72
+			],
+			"allTests": [
+				{
+					"Swagger protegido responde 200": true
+				}
+			]
+		}
+	],
+	"count": 1,
+	"totalTime": 791,
+	"collection": {
+		"requests": [
+			{
+				"id": "1162fda0-eaa5-4185-8f6b-ca59479e649a",
+				"method": "POST"
+			},
+			{
+				"id": "a96887c5-bb27-4b09-9fd0-7c5a7d044741",
+				"method": "POST"
+			},
+			{
+				"id": "279f78b5-9853-4c49-a3b8-cc36ca5b6c89",
+				"method": "GET"
+			},
+			{
+				"id": "a0b1dac7-8f1b-42cf-bb8b-a8dd0532d501",
+				"method": "GET"
+			},
+			{
+				"id": "35af293a-a6df-452f-b446-fdd842d3dadd",
+				"method": "POST"
+			},
+			{
+				"id": "b63375cc-2daa-4c87-b44e-ef57874b1c6b",
+				"method": "DELETE"
+			},
+			{
+				"id": "b631be16-28ca-4eff-89f0-153748ddbd08",
+				"method": "GET"
+			}
+		]
+	}
+}
