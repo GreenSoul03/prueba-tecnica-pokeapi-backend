@@ -1,98 +1,113 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# 🧠 Prueba Técnica Kitkaton - PokeAPI (Backend NestJS)
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Este proyecto implementa una API REST construida con **NestJS**, **PostgreSQL** y consumo interno de **GraphQL (PokeAPI)**.  
+Permite registrar usuarios, autenticarse mediante **JWT**, buscar Pokémon y gestionarlos como favoritos.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+---
 
-## Description
+## 🚀 Despliegue
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+**Endpoint público (AWS Elastic Beanstalk):**  
+👉 [http://pokeapi-env.eba-3x7ewjh4.us-east-1.elasticbeanstalk.com](http://pokeapi-env.eba-3x7ewjh4.us-east-1.elasticbeanstalk.com)
 
-## Project setup
+**Swagger Docs:**  
+👉 [http://pokeapi-env.eba-3x7ewjh4.us-east-1.elasticbeanstalk.com/docs](http://pokeapi-env.eba-3x7ewjh4.us-east-1.elasticbeanstalk.com/docs)  
+🔐 **Basic Auth:**
+Usuario: admin
+Contraseña: kitkaton123
 
-```bash
-$ npm install
-```
+---
 
-## Compile and run the project
+## 🧩 Tecnologías utilizadas
 
-```bash
-# development
-$ npm run start
+- **Node.js 20**
+- **NestJS (TypeScript)**
+- **PostgreSQL (AWS RDS)**
+- **Prisma ORM**
+- **GraphQL interno (PokeAPI v1beta2)**
+- **JWT + Passport**
+- **Swagger + Basic Auth**
+- **ESLint + Prettier**
+- **Jest (≥70 % cobertura)**
 
-# watch mode
-$ npm run start:dev
+---
 
-# production mode
-$ npm run start:prod
-```
-
-## Run tests
+## 📦 Instalación local
 
 ```bash
-# unit tests
-$ npm run test
+# Clonar el repositorio
+git clone https://github.com/GreenSoul03/prueba-tecnica-pokeapi-backend.git
+cd prueba-tecnica-pokeapi-backend
 
-# e2e tests
-$ npm run test:e2e
+# Instalar dependencias
+npm install
 
-# test coverage
-$ npm run test:cov
-```
+# Variables de entorno (.env)
+DATABASE_URL=postgresql://<user>:<password>@<host>:5432/pokeapi?schema=public
+JWT_SECRET=GENGAR_SECRET_SUPER_SEGURO
+PORT=8080
+BASIC_AUTH_USER=admin
+BASIC_AUTH_PASSWORD=kitkaton123
+NODE_ENV=development
 
-## Deployment
+# Ejecutar servidor
+npm run start:dev
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+# Pruebas
+npm run test
+npm run test:cov
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+📬 Endpoints principales
+🔐 Autenticación (/api/v1/auth)
+Método	       Ruta	               Descripción
+POST	  /api/v1/auth/register	   Registrar un nuevo usuario
+POST	  /api/v1/auth/login	   Iniciar sesión y obtener JWT
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
+🧩 Pokémon (/api/v1/pokemon)
+Método	        Ruta	           Descripción
+GET	      /api/v1/pokemon	       Buscar Pokémon por nombre (consumo interno de GraphQL)
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+⭐ Favoritos (/api/v1/favorites)
+Método	        Ruta	           Descripción
+GET	  /api/v1/favorites	Listar favoritos del usuario autenticado
+POST  /api/v1/favorites	Agregar un Pokémon a favoritos
+DELETE /api/v1/favorites/:pokemonId	Eliminar un Pokémon de los favoritos
 
-## Resources
 
-Check out a few resources that may come in handy when working with NestJS:
+📁 Colección Postman
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+Archivo: pokeAPI NestJS.postman_collection.json
+Incluye scripts automáticos:
 
-## Support
+Guarda el token JWT en {{jwtToken}} tras login
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Usa ese token en las rutas protegidas
 
-## Stay in touch
+Valida respuestas con tests Postman
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
 
-## License
+🧹 Calidad de código
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+npm run lint → analiza estilo y errores
+
+npm run format → aplica formato con Prettier
+
+
+🧠 Consideraciones técnicas
+
+Los endpoints REST son consumibles públicamente.
+
+Las peticiones a la PokeAPI GraphQL se realizan de forma interna, no se expone el endpoint GraphQL.
+
+JWT se genera con AuthService y se valida en rutas protegidas mediante JwtAuthGuard.
+
+Swagger está protegido con Basic Auth.
+
+
+Autor
+
+David Cano
+Desarrollador Backend - Prueba Técnica Kitkaton
+contacto: davidsantiago03.com@gmail.com
+
+🌐 http://pokeapi-env.eba-3x7ewjh4.us-east-1.elasticbeanstalk.com
